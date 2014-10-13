@@ -21,6 +21,9 @@ http://www.springframework.org/schema/security/oauth2 http://www.springframework
 	<context:component-scan base-package="com.xabe.jersey" />
 	<mvc:annotation-driven  />
 	<mvc:default-servlet-handler />
+	
+	<!-- Load Properties -->
+	<context:property-placeholder location="classpath:configuration.properties" ignore-unresolvable="true" ignore-resource-not-found="true" />
 
 	<!-- Server Token -->
 
@@ -31,7 +34,8 @@ http://www.springframework.org/schema/security/oauth2 http://www.springframework
 		<sec:http-basic entry-point-ref="clientAuthenticationEntryPoint" />
 		<sec:custom-filter ref="clientCredentialsTokenEndpointFilter" before="BASIC_AUTH_FILTER" />
 		<sec:access-denied-handler ref="oauthAccessDeniedHandler" />
-		
+		<sec:custom-filter ref="corsFilter" after="LAST"/>
+		 
 	</sec:http>
 	
 	<!-- Autentication Manager de Server Token -->

@@ -3,14 +3,18 @@ package com.xabe.jersey;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.ContextLoader;
 
 import com.xabe.jersey.exception.GenericExceptionMapper;
+import com.xabe.jersey.filter.JerseyCrossFilter;
 
 /**
  * Clase que se encarga de configurar los servicios Rest
@@ -27,6 +31,10 @@ public class MyApplication extends ResourceConfig {
     	register(RequestContextFilter.class);
         register(JacksonFeature.class);
         register(GenericExceptionMapper.class);
+        //filter CORS
+        ApplicationContext rootCtx = ContextLoader.getCurrentWebApplicationContext();
+        ContainerResponseFilter filter = rootCtx.getBean(JerseyCrossFilter.class);
+        register(filter);
         
         if (mediaTypeMap == null)
         {
